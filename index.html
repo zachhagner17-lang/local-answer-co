@@ -16,7 +16,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 94 C50 94 20 64 20 42 A30 30 0 1 1 80 42 C80 64 50 94 50 94 Z' fill='%2316324F'/%3E%3Ccircle cx='50' cy='42' r='18' fill='%23fff'/%3E%3Cpath d='M41 42.5 L47.5 49 L60 35.5' fill='none' stroke='%23F28C28' stroke-width='6.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Cpolygon points=%22136.74,11.31 188.69,63.26 188.69,136.74 136.74,188.69 63.26,188.69 11.31,136.74 11.31,63.26 63.26,11.31%22 fill=%22%230B1F3A%22/%3E%3Cpolygon points=%22134.82,15.93 184.07,65.18 184.07,134.82 134.82,184.07 65.18,184.07 15.93,134.82 15.93,65.18 65.18,15.93%22 fill=%22none%22 stroke=%22%23C4A35A%22 stroke-width=%222%22/%3E%3Cg transform=%22translate%28100 100%29 scale%281.45%29 translate%28-50 -51%29%22%3E%3Cpath d=%22M26 82 L50 20 L74 82%22 fill=%22none%22 stroke=%22%23F4EFE6%22 stroke-width=%2210%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M31 55 L44 66 L70 39%22 fill=%22none%22 stroke=%22%23C4A35A%22 stroke-width=%2211%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E">
 <!-- schema:start (made by tools/make_schema.py from clients/local-answer-co/business.json) -->
 <script type="application/ld+json">
 {
@@ -70,19 +70,23 @@
 <!-- schema:end -->
 <style>
   :root {
-    --navy: #16324F;
-    --orange: #F28C28;
-    --ink: #1D2733;
-    --muted: #5A6B7B;
-    --soft: #F4F6F9;
-    --line: #DDE3EA;
-    --white: #FFFFFF;
+    --navy: #0B1F3A;
+    --gold: #C4A35A;
+    --gold-hover: #D4B774;
+    --gold-text: #83692F;
+    --bone: #F4EFE6;
+    --bone-deep: #EAE2D3;
+    --card: #FBF8F2;
+    --jade: #2F6F5E;
+    --ink: #0B1F3A;
+    --muted: #4A5A6A;
+    --line: #DCD3C3;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
-    background: var(--white);
+    background: var(--bone);
     color: var(--ink);
     font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
     font-size: 18px;
@@ -94,32 +98,33 @@
   header { border-bottom: 1px solid var(--line); }
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; }
   .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .brand svg { width: 34px; height: 34px; flex: none; }
+  .brand svg.mark { width: 40px; height: 40px; flex: none; }
+  .brand svg.nebu { width: 1.35em; height: 0.62em; margin-left: 6px; vertical-align: -0.02em; }
   .brand span { font-weight: 800; font-size: 21px; color: var(--navy); letter-spacing: -0.3px; }
-  .brand b { color: var(--orange); font-weight: 800; }
+  .brand b { color: var(--gold-text); font-weight: 800; white-space: nowrap; }
   .call { font-weight: 700; font-size: 16px; text-decoration: none; white-space: nowrap; }
 
-  .hero { background: var(--navy); color: var(--white); }
+  .hero { background: var(--navy); color: var(--bone); }
   .hero .wrap { padding-top: 64px; padding-bottom: 64px; }
   .hero h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.12; margin: 0 0 18px; letter-spacing: -0.5px; max-width: 16em; }
-  .hero p { font-size: 20px; color: #D7E0EA; margin: 0 0 30px; max-width: 34em; }
+  .hero p { font-size: 20px; color: #D9D2C3; margin: 0 0 30px; max-width: 34em; }
   .btn {
-    display: inline-block; background: var(--orange); color: var(--navy);
+    display: inline-block; background: var(--gold); color: var(--navy);
     font-weight: 800; font-size: 18px; text-decoration: none;
     padding: 15px 24px; border-radius: 8px;
   }
-  .btn:hover, .btn:focus-visible { background: #FFA24A; }
-  .note { display: block; margin-top: 12px; font-size: 15px; color: #B9C6D4; }
+  .btn:hover, .btn:focus-visible { background: var(--gold-hover); }
+  .note { display: block; margin-top: 12px; font-size: 15px; color: #B8B2A5; }
 
   section { padding: 56px 0; }
-  section.soft { background: var(--soft); }
+  section.soft { background: var(--bone-deep); }
   h2 { font-size: clamp(24px, 3.4vw, 32px); color: var(--navy); margin: 0 0 22px; line-height: 1.2; }
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .step { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 22px; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 22px; }
   .step .num {
     display: inline-flex; align-items: center; justify-content: center;
     width: 34px; height: 34px; border-radius: 50%;
-    background: var(--navy); color: var(--white); font-weight: 800; margin-bottom: 10px;
+    background: var(--jade); color: var(--bone); font-weight: 800; margin-bottom: 10px;
   }
   .step h3 { margin: 0 0 6px; font-size: 20px; color: var(--navy); }
   .step p { margin: 0; color: var(--muted); font-size: 17px; }
@@ -127,12 +132,12 @@
   .fixlist { columns: 2; column-gap: 40px; padding-left: 22px; margin: 0; }
   .fixlist li { break-inside: avoid; margin: 0 0 10px; }
 
-  .promise { border-left: 5px solid var(--orange); padding: 6px 0 6px 20px; max-width: 40em; }
+  .promise { border-left: 5px solid var(--gold); padding: 6px 0 6px 20px; max-width: 40em; }
   .promise p { margin: 0 0 12px; }
   .promise p:last-child { margin-bottom: 0; }
 
   .trades { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; margin: 0; list-style: none; }
-  .trades li { background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 16px; }
+  .trades li { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 16px; }
 
   .contact { text-align: center; }
   .contact p { color: var(--muted); max-width: 32em; margin: 0 auto 26px; }
@@ -157,12 +162,8 @@
 <header>
   <div class="bar wrap">
     <a class="brand" href="#top" aria-label="Local Answers and Co. home">
-      <svg viewBox="0 0 100 100" aria-hidden="true">
-        <path d="M50 94 C50 94 20 64 20 42 A30 30 0 1 1 80 42 C80 64 50 94 50 94 Z" fill="#16324F"/>
-        <circle cx="50" cy="42" r="18" fill="#FFFFFF"/>
-        <path d="M41 42.5 L47.5 49 L60 35.5" fill="none" stroke="#F28C28" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>Local&nbsp;Answers <b>and&nbsp;Co.</b></span>
+      <svg class="mark" viewBox="0 0 200 200" aria-hidden="true"><polygon points="136.74,11.31 188.69,63.26 188.69,136.74 136.74,188.69 63.26,188.69 11.31,136.74 11.31,63.26 63.26,11.31" fill="#0B1F3A"/><polygon points="134.82,15.93 184.07,65.18 184.07,134.82 134.82,184.07 65.18,184.07 15.93,134.82 15.93,65.18 65.18,15.93" fill="none" stroke="#C4A35A" stroke-width="2"/><g transform="translate(100 100) scale(1.45) translate(-50 -51)"><path d="M26 82 L50 20 L74 82" fill="none" stroke="#F4EFE6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 55 L44 66 L70 39" fill="none" stroke="#C4A35A" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+      <span>Local&nbsp;Answers <b>and&nbsp;Co.<svg class="nebu" viewBox="0 0 100 46" aria-hidden="true"><g fill="none" stroke="#83692F" stroke-linecap="round" stroke-linejoin="round"><path d="M8 44 V14 Q8 4 18 4 H82 Q92 4 92 14 V44" stroke-width="7"/><path d="M14 9 Q50 37 86 9" stroke-width="6"/></g><g fill="#83692F"><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(26 23.28) rotate(27.4)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(35 27.07) rotate(18.0)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(43 28.97) rotate(8.6)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(50 29.50) rotate(0.0)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(57 28.97) rotate(-8.6)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(65 27.07) rotate(-18.0)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(74 23.28) rotate(-27.4)"/></g></svg></b></span>
     </a>
     <a class="call" href="tel:+15736803992">(573) 680-3992</a>
   </div>
