@@ -1,0 +1,319 @@
+// The moving 3D logo (the bagua medallion) in the navy band at the top of every page, and on the home
+// page also beside the "Your goals come first" cards. It is decoration only: every word stays in the
+// HTML and never moves for it. If anything fails (no WebGL, the CDN is down, or the visitor asked for
+// reduced motion), the page looks as it did before (the home page shows its flat logo).
+const CDN = 'https://cdn.jsdelivr.net/npm/three@0.186.1';
+const GOLD = '#C4A35A', NAVY = '#0B1F3A', BONE = '#F4EFE6';
+// Later Heaven trigrams clockwise from the top, lines listed inner to outer (1 = solid line), as in
+// the logo. Dui (Zach, right) and Xun (Jake, top left) are bone; the other six are antique gold.
+const TRIGRAMS = [[1, 0, 1], [0, 0, 0], [1, 1, 0], [1, 1, 1], [0, 1, 0], [0, 0, 1], [1, 0, 0], [0, 1, 1]];
+const BRIGHT = new Set([2, 7]);
+const TAU = Math.PI * 2;
+
+const root = document.documentElement;
+const hero = document.querySelector('.hero');
+const heroBox = document.getElementById('hero3d') || document.querySelector('.page-3d');
+const storyBox = document.getElementById('story3d');
+const stage = document.querySelector('.story-stage');
+const clamp01 = v => Math.min(1, Math.max(0, v));
+const pointer = { x: 0, y: 0 };
+const fallBack = () => root.classList.remove('has-3d', 'has-story', 'wait-3d');
+
+if (heroBox && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (storyBox) reveal();
+  // Load the 3D once the page itself has finished, so the words and buttons come first.
+  const later = () => (window.requestIdleCallback || setTimeout)(() => start().catch(fallBack));
+  document.readyState === 'complete' ? later() : addEventListener('load', later, { once: true });
+}
+
+// Sections fade up as they scroll into view.
+function reveal() {
+  const els = document.querySelectorAll('main section h2, .intro, .why-now p, .stat, .steps-flow .step, .fixlist li, .promise, .trades li, main section > .wrap > p');
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { rootMargin: '0px 0px -6% 0px' });
+  els.forEach(el => {
+    if (el.matches('li, .steps-flow .step')) el.style.transitionDelay = Math.min(6, [...el.parentNode.children].indexOf(el)) * 60 + 'ms';
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+  root.classList.add('has-motion');
+}
+
+async function start() {
+  const [THREE, { RoomEnvironment }] = await Promise.all([
+    import(`${CDN}/+esm`),
+    import(`${CDN}/examples/jsm/environments/RoomEnvironment.js/+esm`),
+  ]);
+  addEventListener('pointermove', e => {
+    pointer.x = e.clientX / innerWidth * 2 - 1;
+    pointer.y = e.clientY / innerHeight * 2 - 1;
+  }, { passive: true });
+  await homeScene(THREE, RoomEnvironment);
+}
+
+// One WebGL view: renderer, studio lighting, camera and a medallion.
+function makeStage(THREE, RoomEnvironment, withDust) {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });  // throws without WebGL
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.setClearColor(0x000000, 0);
+  const canvas = renderer.domElement;
+  canvas.setAttribute('aria-hidden', 'true');
+
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.8;
+  pmrem.dispose();
+  const key = new THREE.DirectionalLight(0xfff1d6, 1.4);
+  key.position.set(-3, 4, 5);
+  const rim = new THREE.DirectionalLight(GOLD, 2);
+  rim.position.set(3, -2, -4);
+  scene.add(key, rim);
+
+  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
+  const m = buildMedallion(THREE);
+  scene.add(m.group);
+  if (withDust) scene.add(m.dust = buildDust(THREE));
+
+  // Size the drawing to its box and back the camera off until a circle of radius `half` fits.
+  function fit(box, half) {
+    if (!box || !box.clientWidth || !box.clientHeight) return;
+    renderer.setSize(box.clientWidth, box.clientHeight, false);
+    camera.aspect = box.clientWidth / box.clientHeight;
+    const tan = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    camera.position.z = Math.max(half / tan, half / (tan * camera.aspect));
+    camera.updateProjectionMatrix();
+  }
+  return { renderer, canvas, scene, camera, m, fit };
+}
+
+// Spread the parts out (e), light the trigrams one by one (scan), and make the check glow (glow).
+function pose(m, cur, t) {
+  m.trigrams.forEach((g, i) => {
+    const ei = clamp01(cur.e * 1.2 - i * 0.025);
+    g.position.copy(g.userData.base).addScaledVector(g.userData.dir, 0.22 * ei);
+    g.position.z = 0.42 * ei + 0.05 * Math.sin(t * 1.3 + i) * ei;
+    g.userData.plate.rotation.x = -0.7 * ei;
+    const lit = cur.scan > i + 1 ? 0.3 : cur.scan > i ? 0.9 : 0;
+    g.userData.mat.emissiveIntensity = lit * (1 - cur.glow);
+  });
+  m.ring.position.z = 0.2 * cur.e;
+  m.center.position.z = 0.36 * cur.e;
+  m.center.scale.setScalar(1 + 0.06 * cur.e);
+  m.check.emissiveIntensity = 0.7 * cur.glow;
+}
+
+// Animation loop that runs only while `isOn()` and the tab is showing.
+function loop(step, isOn) {
+  let raf = 0, last = 0;
+  function frame(now) {
+    raf = 0;
+    if (!isOn() || document.hidden) return;
+    step(now / 1000, Math.min(0.05, (now - last) / 1000));
+    last = now;
+    raf = requestAnimationFrame(frame);
+  }
+  const kick = () => {
+    if (!raf && isOn() && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(frame); }
+  };
+  document.addEventListener('visibilitychange', kick);
+  return kick;
+}
+
+// The medallion in the navy band, and on the home page beside the "Your goals come first" cards. One
+// drawing moves to whichever of the two is on screen; in both it floats and turns on its own, and the
+// page scroll only carries it along with everything else.
+async function homeScene(THREE, RoomEnvironment) {
+  const s = makeStage(THREE, RoomEnvironment, true), m = s.m, canvas = s.canvas;
+  canvas.className = 'medallion-canvas';
+
+  // Which box shows the medallion: the hero, the story, or neither (then nothing renders).
+  let active = null;
+  const vis = { hero: false, story: false }, pt = { x: 0, y: 0 };
+  const cur = { e: 1.4, yaw: -1.2, pitch: 0.3, lift: 0, glow: 0, scan: -1 };  // starts apart, then assembles
+
+  const resize = () => s.fit(canvas.parentElement, 1.12);
+
+  function pick() {
+    const storyOn = vis.story && storyBox && getComputedStyle(storyBox).display !== 'none';
+    const next = storyOn ? 'story' : vis.hero && !heroBox.classList.contains('off') ? 'hero' : null;
+    if (next === active) return;
+    active = next;
+    if (!next) return;
+    (next === 'story' ? storyBox : heroBox).appendChild(canvas);
+    resize();
+    kick();
+  }
+
+  function targets() {
+    if (active === 'story') return { e: 0, yaw: 0, pitch: 0.06, lift: 0, glow: 0, scan: -1 };
+    const r = hero.getBoundingClientRect(), hp = clamp01(-r.top / r.height);
+    return { e: 0, yaw: 0, pitch: -0.06 + hp * 0.5, lift: hp * 0.6, glow: 0, scan: -1 };
+  }
+
+  const kick = loop((t, dt) => {
+    const tg = targets(), a = 1 - Math.exp(-dt * 4.5);
+    for (const k in cur) cur[k] += (tg[k] - cur[k]) * a;
+    pt.x += (pointer.x - pt.x) * a;
+    pt.y += (pointer.y - pt.y) * a;
+    m.group.rotation.y = cur.yaw + 0.24 * Math.sin(t * 0.45) + pt.x * 0.3;
+    m.group.rotation.x = cur.pitch + 0.06 * Math.sin(t * 0.6) + pt.y * 0.2;
+    m.group.position.y = 0.035 * Math.sin(t * 0.9) + cur.lift;
+    pose(m, cur, t);
+    m.dust.rotation.z = t * 0.03;
+    m.dust.rotation.y = 0.15 * Math.sin(t * 0.2);
+    s.renderer.render(s.scene, s.camera);
+  }, () => !!active);
+
+  canvas.addEventListener('webglcontextlost', () => {
+    active = null;
+    canvas.remove();
+    fallBack();
+  });
+  // Other pages: on wide screens the logo floats in the empty space beside the words. If it would touch
+  // any of them (a narrow window, or the fallback font), it steps aside rather than move a word.
+  function clearOfWords() {
+    if (heroBox.classList.contains('page-3d')) {
+      heroBox.classList.remove('off');
+      if (getComputedStyle(heroBox).position === 'absolute') {
+        const b = heroBox.getBoundingClientRect();
+        const hit = [...heroBox.parentElement.children].some(el => {
+          if (el === heroBox) return false;
+          const r = document.createRange();
+          r.selectNodeContents(el);
+          return [...r.getClientRects()].some(w => w.width && w.right > b.left - 16 && w.left < b.right && w.bottom > b.top && w.top < b.bottom);
+        });
+        heroBox.classList.toggle('off', hit);
+      }
+    }
+    resize();
+    pick();
+  }
+  addEventListener('resize', clearOfWords);
+
+  heroBox.appendChild(canvas);
+  active = 'hero';
+  resize();
+  await s.renderer.compileAsync(s.scene, s.camera);  // shaders compile off the main thread where the browser can
+  s.renderer.render(s.scene, s.camera);  // first frame before switching the page over
+  root.classList.add('has-3d');
+  root.classList.remove('wait-3d');
+  clearOfWords();
+  document.fonts.ready.then(clearOfWords);
+  if (stage && stage.getBoundingClientRect().top > innerHeight) root.classList.add('has-story');
+  requestAnimationFrame(() => canvas.classList.add('on'));
+  active = null;
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { vis[en.target === hero ? 'hero' : 'story'] = en.isIntersecting; });
+    pick();
+  }, { rootMargin: '80px 0px' });
+  io.observe(hero);
+  if (stage) io.observe(stage);
+}
+
+function buildMedallion(THREE) {
+  const std = o => new THREE.MeshStandardMaterial(o);
+  const gold = std({ color: GOLD, metalness: 1, roughness: 0.24 });
+  const enamel = new THREE.MeshPhysicalMaterial({ color: NAVY, roughness: 0.35, clearcoat: 0.7, clearcoatRoughness: 0.12 });
+  const bone = std({ color: BONE, roughness: 0.3 });
+  const check = std({ color: GOLD, metalness: 1, roughness: 0.2, emissive: GOLD, emissiveIntensity: 0 });
+
+  const octPts = r => Array.from({ length: 8 }, (_, i) => {
+    const a = THREE.MathUtils.degToRad(22.5 + 45 * i);  // flat top edge, like the logo
+    return new THREE.Vector2(r * Math.cos(a), r * Math.sin(a));
+  });
+  const oct = (r, hole) => {
+    const s = new THREE.Shape(octPts(r));
+    if (hole) s.holes.push(new THREE.Path(octPts(hole).reverse()));
+    return s;
+  };
+  const slab = (shape, depth, bevel, z) => {
+    const g = new THREE.ExtrudeGeometry(shape, {
+      depth, bevelEnabled: bevel > 0, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 3, curveSegments: 6,
+    });
+    g.translate(0, 0, z - depth / 2);
+    return g;
+  };
+  const rrect = (w, h, r) => {
+    const s = new THREE.Shape(), x = -w / 2, y = -h / 2;
+    s.moveTo(x + r, y);
+    s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+    s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+    s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+    return s;
+  };
+
+  const group = new THREE.Group();
+  group.add(new THREE.Mesh(slab(oct(0.97), 0.12, 0.03, 0), gold));             // gold case, front at z 0.09
+  group.add(new THREE.Mesh(slab(oct(0.9), 0.02, 0, 0.1), enamel));             // navy enamel face
+  group.add(new THREE.Mesh(slab(oct(0.985, 0.9), 0.04, 0.012, 0.122), gold));  // raised bezel
+  const ring = new THREE.Mesh(slab(oct(0.665, 0.64), 0.012, 0.006, 0.122), gold);  // inner octagon line
+  group.add(ring);
+
+  // Trigram bars: logo units / 96 = 3D units (outer radius 1).
+  const solid = slab(rrect(0.338, 0.041, 0.012), 0.016, 0.008, 0);
+  const half = slab(rrect(0.125, 0.041, 0.012), 0.016, 0.008, 0);
+  const trigrams = TRIGRAMS.map((lines, i) => {
+    const ang = -i * Math.PI / 4;  // clockwise from the top
+    const mat = BRIGHT.has(i)
+      ? std({ color: BONE, roughness: 0.3, emissive: '#FFF6E0', emissiveIntensity: 0 })
+      : std({ color: '#8C7A4A', metalness: 1, roughness: 0.42, emissive: GOLD, emissiveIntensity: 0 });
+    const g = new THREE.Group(), plate = new THREE.Group();
+    g.rotation.z = ang;
+    const bar = (geo, x, y) => { const b = new THREE.Mesh(geo, mat); b.position.set(x, y, 0); plate.add(b); };
+    lines.forEach((on, row) => {
+      const y = (row - 1) * 0.0885;  // inner, middle, outer
+      if (on) bar(solid, 0, y);
+      else { bar(half, -0.107, y); bar(half, 0.107, y); }
+    });
+    plate.position.z = 0.126;
+    g.add(plate);
+    const dir = new THREE.Vector3(-Math.sin(ang), Math.cos(ang), 0);
+    g.userData = { base: dir.clone().multiplyScalar(0.775), dir, plate, mat };
+    group.add(g);
+    return g;
+  });
+
+  // The A (bone) and the check (gold), as rounded strokes like the logo's.
+  const center = new THREE.Group();
+  const xy = ([x, y]) => new THREE.Vector2(1.2 * (x - 50) / 96, -1.2 * (y - 51) / 96);
+  const stroke = (p, q, r, mat, z) => {
+    const a = xy(p), b = xy(q);
+    const mesh = new THREE.Mesh(new THREE.CapsuleGeometry(r, a.distanceTo(b), 8, 20), mat);
+    mesh.position.set((a.x + b.x) / 2, (a.y + b.y) / 2, z);
+    mesh.rotation.z = Math.atan2(b.y - a.y, b.x - a.x) - Math.PI / 2;
+    mesh.scale.z = 0.5;
+    center.add(mesh);
+  };
+  stroke([26, 82], [50, 20], 0.0625, bone, 0.141);
+  stroke([50, 20], [74, 82], 0.0625, bone, 0.141);
+  stroke([31, 55], [44, 66], 0.069, check, 0.156);
+  stroke([44, 66], [70, 39], 0.069, check, 0.156);
+  group.add(center);
+
+  return { group, trigrams, ring, center, check };
+}
+
+function buildDust(THREE) {
+  const n = 150, pos = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const r = 1.25 + Math.random() * 1.4, t = Math.random() * TAU;
+    pos.set([r * Math.cos(t), r * Math.sin(t) * 0.85, (Math.random() - 0.5) * 1.8], i * 3);
+  }
+  const dot = document.createElement('canvas');
+  dot.width = dot.height = 32;
+  const c = dot.getContext('2d'), grad = c.createRadialGradient(16, 16, 0, 16, 16, 16);
+  grad.addColorStop(0, 'rgba(255,255,255,1)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  c.fillStyle = grad;
+  c.fillRect(0, 0, 32, 32);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  return new THREE.Points(geo, new THREE.PointsMaterial({
+    color: GOLD, size: 0.045, map: new THREE.CanvasTexture(dot), transparent: true, opacity: 0.8, depthWrite: false,
+  }));
+}

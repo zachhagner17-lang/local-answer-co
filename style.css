@@ -205,3 +205,57 @@ a:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
 /* Contact: email line under the Call and Text buttons */
 .hero p.mail { margin: 18px 0 0; font-size: 18px; }
 .hero p.mail a { color: var(--gold); font-weight: 700; }
+
+/* Headings in an elegant serif (Cormorant Garamond from Google Fonts; Georgia if it can't load) */
+h1, h2, .stat b { font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif; font-weight: 700; }
+.hero h1 { font-size: clamp(40px, 6.2vw, 68px); line-height: 1.02; letter-spacing: -0.3px; }
+.hero h1 .gold { font-style: italic; font-weight: 600; }
+h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.06; letter-spacing: -0.2px; }
+.stat b { font-size: clamp(40px, 11vw, 50px); }
+.btn { transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(11, 31, 58, 0.18); }
+
+/* Home: sections fade up as they scroll into view (logo3d.js adds has-motion) */
+.has-motion .reveal { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s ease; }
+.has-motion .reveal.in { opacity: 1; transform: none; }
+
+/* Home: the 3D medallion (logo3d.js). While it loads only the gold glow shows (wait-3d); if it can't
+   run, the flat SVG mark shows instead. */
+.hero-3d { position: relative; flex: none; width: 240px; height: 240px; display: grid; place-items: center; }
+.hero-3d::before { content: ""; position: absolute; inset: 6%; border-radius: 50%; background: radial-gradient(closest-side, rgba(196, 163, 90, 0.22), rgba(196, 163, 90, 0)); }
+.hero-3d svg.big { display: block; position: relative; width: 180px; height: 180px; }
+.has-3d .hero-3d svg.big, .wait-3d .hero-3d svg.big { visibility: hidden; }
+.medallion-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 1.2s ease; }
+.medallion-canvas.on { opacity: 1; }
+.story-3d { display: none; position: relative; }
+@media (min-width: 761px) and (max-width: 1000px) {
+  .hero-3d { width: 190px; height: 190px; }
+  .hero-3d svg.big { width: 140px; height: 140px; }
+}
+@media (max-width: 760px) {
+  .hero-row { flex-direction: column-reverse; align-items: stretch; gap: 0; }
+  .hero .wrap.hero-row { padding-top: 12px; }
+  .hero-3d { width: auto; height: 140px; margin: 0 -16px 6px; }
+  .hero-3d svg.big { width: 108px; height: 108px; }
+}
+
+/* Home: "Your goals come first" with the medallion beside the cards. It scrolls with the page like
+   everything else (has-story is set only when the visitor hasn't reached it yet, so nothing jumps). */
+.has-story .story-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: center; gap: 40px; }
+.has-story .story-steps { grid-template-columns: 1fr; }
+.has-story .story-3d { display: block; height: 340px; }
+@media (max-width: 760px) {
+  .has-story .story-grid { grid-template-columns: 1fr; gap: 8px; }
+  .has-story .story-3d { order: -1; height: 220px; margin: 0 -16px; }
+}
+
+/* Other pages: the moving logo in the navy band (logo3d.js). It never takes room from the words: on wide
+   screens it floats in the empty space on the right (and steps aside if it would touch a word), on
+   narrower ones it sits above them. Without the 3D the band looks as before. */
+.page-3d { display: none; }
+.hero.page .wrap { position: relative; }
+.wait-3d .page-3d, .has-3d .page-3d { display: block; position: absolute; right: 16px; top: 50%; width: clamp(126px, 13vw, 170px); height: clamp(126px, 13vw, 170px); transform: translateY(-50%); }
+.page-3d.off { visibility: hidden; }
+@media (max-width: 900px) {
+  .wait-3d .page-3d, .has-3d .page-3d { position: relative; right: auto; top: auto; transform: none; width: auto; height: 120px; margin: -10px -16px 10px; }
+}
