@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local Business Schema Markup: Example, Rules and What It Won&#x27;t Do | Local Answers and Co.</title>
+<meta name="description" content="LocalBusiness schema explained in plain English: what Google requires, a copy-ready JSON-LD example, how to test it, and why it isn&#x27;t a magic switch for AI answers.">
+<link rel="canonical" href="https://localanswersandco.com/guides/local-business-schema/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Local Answers and Co.">
+<meta property="og:title" content="Local Business Schema Markup: Example, Rules and What It Won&#x27;t Do | Local Answers and Co.">
+<meta property="og:description" content="LocalBusiness schema explained in plain English: what Google requires, a copy-ready JSON-LD example, how to test it, and why it isn&#x27;t a magic switch for AI answers.">
+<meta property="og:url" content="https://localanswersandco.com/guides/local-business-schema/">
+<meta property="og:image" content="https://localanswersandco.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0B1F3A">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Local business schema, explained",
+      "datePublished": "2026-10-05",
+      "dateModified": "2026-10-05",
+      "mainEntityOfPage": "https://localanswersandco.com/guides/local-business-schema/",
+      "image": "https://localanswersandco.com/og-image.png",
+      "author": {
+        "@type": "Organization",
+        "name": "Local Answers and Co.",
+        "url": "https://localanswersandco.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Local Answers and Co.",
+        "url": "https://localanswersandco.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://localanswersandco.com/logo-icon.png"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is LocalBusiness schema?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It's a block of structured data, usually JSON-LD, that labels your business name, address, phone and hours so search engines can read them exactly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need schema to show up in Google's AI answers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Google says no special schema is needed for its AI features. Schema still helps search engines read your business details correctly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does schema help local SEO?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It helps search engines read your name, address, phone and hours exactly. Google doesn't promise any special display from it, so treat it as one solid basic, alongside your Google Business Profile, reviews and listings."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which schema type should a local business use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The most specific LocalBusiness type that fits, like Plumber, Dentist or Restaurant. Google recommends the most specific type possible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I add local business schema in WordPress?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use a schema plugin, or paste a filled-in JSON-LD block into your site's code. Then check it in Google's Rich Results Test."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What about schema for multiple locations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mark up each location with its own details. For departments with their own hours or phone numbers, use the department property."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script>/* The moving logo replaces the still one in the hero; hide the still one while it loads (back after 10 s if it never does) */ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('wait-3d'); setTimeout(function () { document.documentElement.classList.remove('wait-3d'); }, 10000); }</script>
+<link rel="stylesheet" href="/style.css?v=20261005d">
+</head>
+<body>
+<a class="skip" href="#top">Skip to main content</a>
+
+<header>
+  <div class="bar wrap">
+    <a class="brand" href="/" aria-label="Local Answers and Co. home">
+      <svg class="mark" viewBox="0 0 200 200" aria-hidden="true"><polygon points="136.74,11.31 188.69,63.26 188.69,136.74 136.74,188.69 63.26,188.69 11.31,136.74 11.31,63.26 63.26,11.31" fill="#0B1F3A"/><polygon points="134.82,15.93 184.07,65.18 184.07,134.82 134.82,184.07 65.18,184.07 15.93,134.82 15.93,65.18 65.18,15.93" fill="none" stroke="#C4A35A" stroke-width="3"/><g transform="translate(100 100) rotate(0) translate(0 -66)" fill="#C4A35A" opacity="0.45"><rect x="-16.0" y="6.5" width="32" height="5" rx="1.5"/><rect x="-16.0" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="-16.0" y="-11.5" width="32" height="5" rx="1.5"/></g><g transform="translate(100 100) rotate(45) translate(0 -66)" fill="#C4A35A" opacity="0.45"><rect x="-16.0" y="6.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="6.5" width="11.5" height="5" rx="1.5"/><rect x="-16.0" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="-16.0" y="-11.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="-11.5" width="11.5" height="5" rx="1.5"/></g><g transform="translate(100 100) rotate(90) translate(0 -64)" fill="#F4EFE6" opacity="1"><rect x="-20.0" y="8.0" width="40" height="7" rx="1.5"/><rect x="-20.0" y="-3.5" width="40" height="7" rx="1.5"/><rect x="-20.0" y="-15.0" width="15.5" height="7" rx="1.5"/><rect x="4.5" y="-15.0" width="15.5" height="7" rx="1.5"/></g><g transform="translate(100 100) rotate(135) translate(0 -66)" fill="#C4A35A" opacity="0.45"><rect x="-16.0" y="6.5" width="32" height="5" rx="1.5"/><rect x="-16.0" y="-2.5" width="32" height="5" rx="1.5"/><rect x="-16.0" y="-11.5" width="32" height="5" rx="1.5"/></g><g transform="translate(100 100) rotate(180) translate(0 -66)" fill="#C4A35A" opacity="0.45"><rect x="-16.0" y="6.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="6.5" width="11.5" height="5" rx="1.5"/><rect x="-16.0" y="-2.5" width="32" height="5" rx="1.5"/><rect x="-16.0" y="-11.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="-11.5" width="11.5" height="5" rx="1.5"/></g><g transform="translate(100 100) rotate(225) translate(0 -66)" fill="#C4A35A" opacity="0.45"><rect x="-16.0" y="6.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="6.5" width="11.5" height="5" rx="1.5"/><rect x="-16.0" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="-16.0" y="-11.5" width="32" height="5" rx="1.5"/></g><g transform="translate(100 100) rotate(270) translate(0 -66)" fill="#C4A35A" opacity="0.45"><rect x="-16.0" y="6.5" width="32" height="5" rx="1.5"/><rect x="-16.0" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="-2.5" width="11.5" height="5" rx="1.5"/><rect x="-16.0" y="-11.5" width="11.5" height="5" rx="1.5"/><rect x="4.5" y="-11.5" width="11.5" height="5" rx="1.5"/></g><g transform="translate(100 100) rotate(315) translate(0 -64)" fill="#F4EFE6" opacity="1"><rect x="-20.0" y="8.0" width="15.5" height="7" rx="1.5"/><rect x="4.5" y="8.0" width="15.5" height="7" rx="1.5"/><rect x="-20.0" y="-3.5" width="40" height="7" rx="1.5"/><rect x="-20.0" y="-15.0" width="40" height="7" rx="1.5"/></g><g transform="translate(100 100) scale(1.05) translate(-50 -51)"><path d="M26 82 L50 20 L74 82" fill="none" stroke="#F4EFE6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 55 L44 66 L70 39" fill="none" stroke="#C4A35A" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+      <span>Local&nbsp;Answers <b>and&nbsp;Co.<svg class="nebu" viewBox="0 0 100 46" aria-hidden="true"><g fill="none" stroke="#83692F" stroke-linecap="round" stroke-linejoin="round"><path d="M8 44 V14 Q8 4 18 4 H82 Q92 4 92 14 V44" stroke-width="7"/><path d="M14 9 Q50 37 86 9" stroke-width="6"/></g><g fill="#83692F"><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(26 23.28) rotate(27.4)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(35 27.07) rotate(18.0)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(43 28.97) rotate(8.6)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(50 29.50) rotate(0.0)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(57 28.97) rotate(-8.6)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(65 27.07) rotate(-18.0)"/><ellipse cx="0" cy="0" rx="3.2" ry="4.8" transform="translate(74 23.28) rotate(-27.4)"/></g></svg></b></span>
+    </a>
+    <nav class="menu" aria-label="Main"><a href="/">Home</a><a href="/about/">About</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a></nav>
+    <a class="call" href="tel:+15736803992">(573) 680-3992</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero page guide-hero">
+    <div class="wrap">
+      <div class="page-3d" aria-hidden="true"></div>
+      <h1>Local business schema, explained</h1>
+      <p>LocalBusiness schema is a small block of code that tells search engines your business name, address, phone and hours. It's worth having. It isn't magic.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap prose guide">
+      <h2>What is local business schema?</h2>
+      <p>It's structured data: code from schema.org's LocalBusiness vocabulary that labels your business details, so search engines can read them without guessing. Google says it can use these details when people search for businesses on Google Search or Maps, for example in a knowledge panel. <span class="source">(Source: <a href="https://developers.google.com/search/docs/appearance/structured-data/local-business">Google Search Central: local business structured data</a>, updated September 8, 2026.)</span></p>
+
+      <h2>What Google requires</h2>
+      <p>Only two properties are required: <code>name</code> and <code>address</code>. Google recommends adding more when they apply, such as <code>telephone</code>, <code>url</code>, <code>openingHoursSpecification</code>, <code>geo</code>, <code>priceRange</code> and <code>department</code>, and for restaurants <code>menu</code> and <code>servesCuisine</code>.</p>
+      <p>Schema.org has many LocalBusiness types. Use the most specific one you can, like <code>Plumber</code>, <code>Dentist</code> or <code>Restaurant</code>, instead of plain <code>LocalBusiness</code>. Google recommends the most specific type possible.</p>
+
+      <h2>A local business schema example you can copy</h2>
+      <p>Replace everything in [brackets] with your own details, exactly as they appear on your Google Business Profile:</p>
+      <pre style="overflow-x:auto;max-width:100%"><code>{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;Plumber&quot;,
+  &quot;name&quot;: &quot;[Your business name, exactly as on your sign]&quot;,
+  &quot;url&quot;: &quot;https://[your website]/&quot;,
+  &quot;telephone&quot;: &quot;[your phone number]&quot;,
+  &quot;address&quot;: {
+    &quot;@type&quot;: &quot;PostalAddress&quot;,
+    &quot;streetAddress&quot;: &quot;[street address]&quot;,
+    &quot;addressLocality&quot;: &quot;[town]&quot;,
+    &quot;addressRegion&quot;: &quot;[state]&quot;,
+    &quot;postalCode&quot;: &quot;[ZIP code]&quot;,
+    &quot;addressCountry&quot;: &quot;US&quot;
+  },
+  &quot;openingHoursSpecification&quot;: [
+    {
+      &quot;@type&quot;: &quot;OpeningHoursSpecification&quot;,
+      &quot;dayOfWeek&quot;: [
+        &quot;Monday&quot;,
+        &quot;Tuesday&quot;,
+        &quot;Wednesday&quot;,
+        &quot;Thursday&quot;,
+        &quot;Friday&quot;
+      ],
+      &quot;opens&quot;: &quot;08:00&quot;,
+      &quot;closes&quot;: &quot;17:00&quot;
+    }
+  ]
+}</code></pre>
+
+      <h2>How to add it</h2>
+      <ul>
+        <li>Put the filled-in block inside a <code>&lt;script type="application/ld+json"&gt;</code> tag on your home page, or on the page for each location.</li>
+        <li>On WordPress or another site builder, a schema plugin or generator can write it for you. Check what it writes.</li>
+        <li>Mark up each location with its own details. For a business with departments that keep their own hours or phone numbers, Google supports the <code>department</code> property.</li>
+      </ul>
+
+      <h2>How to test it</h2>
+      <p>Paste your page address into Google's <a href="https://search.google.com/test/rich-results">Rich Results Test</a> and fix any critical errors.</p>
+
+      <h2>What schema won't do</h2>
+      <p>Google says it doesn't guarantee that features using structured data, such as rich results (sometimes called rich snippets), will show up in search results. And for Google's AI features, Google says there's no special schema you need to add. <span class="source">(Source: <a href="https://developers.google.com/search/docs/appearance/ai-features">Google: AI features and your website</a>.)</span></p>
+      <p>So when you hear that AI "reads schema code first" and names whoever has it, that isn't how it works. Schema is one of the nine basics we fix: good hygiene, not a switch.</p>
+
+      <h2>Related guides</h2>
+      <ul>
+        <li><a href="/google-business-profile-optimization/">Google Business Profile optimization</a></li>
+        <li><a href="/ai-search-optimization/">AI search optimization (GEO and AEO)</a></li>
+        <li><a href="/guides/chatgpt-recommendations/">How to get your business recommended on ChatGPT</a></li>
+        <li><a href="/guides/business-not-showing-on-google/">Why isn't my business showing up on Google or Google Maps?</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Common questions</h2>
+      <div class="faq">
+        <h3>What is LocalBusiness schema?</h3>
+        <p>It's a block of structured data, usually JSON-LD, that labels your business name, address, phone and hours so search engines can read them exactly.</p>
+        <h3>Do I need schema to show up in Google's AI answers?</h3>
+        <p>No. Google says no special schema is needed for its AI features. Schema still helps search engines read your business details correctly.</p>
+        <h3>Does schema help local SEO?</h3>
+        <p>It helps search engines read your name, address, phone and hours exactly. Google doesn't promise any special display from it, so treat it as one solid basic, alongside your Google Business Profile, reviews and listings.</p>
+        <h3>Which schema type should a local business use?</h3>
+        <p>The most specific LocalBusiness type that fits, like Plumber, Dentist or Restaurant. Google recommends the most specific type possible.</p>
+        <h3>How do I add local business schema in WordPress?</h3>
+        <p>Use a schema plugin, or paste a filled-in JSON-LD block into your site's code. Then check it in Google's Rich Results Test.</p>
+        <h3>What about schema for multiple locations?</h3>
+        <p>Mark up each location with its own details. For departments with their own hours or phone numbers, use the department property.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="soft contact">
+    <div class="wrap">
+      <h2>See what AI says about your business</h2>
+      <p>The check is free, with no obligation.</p>
+      <a class="btn" href="/contact/">Get your free check</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav class="foot-links" aria-label="Guides"><a href="/ai-search-optimization/">AI search optimization</a><a href="/google-business-profile-optimization/">Google Business Profile optimization</a><a href="/guides/chatgpt-recommendations/">Get recommended on ChatGPT</a><a href="/guides/business-not-showing-on-google/">Not showing up on Google?</a><a href="/guides/get-more-google-reviews/">Get more Google reviews</a><a href="/guides/apple-business-connect/">Add your business to Apple Maps</a><a href="/guides/bing-places/">Add your business to Bing</a><a href="/guides/local-business-schema/">Local business schema</a></nav>
+    © 2026 Local Answers and Co. · Call or text <a href="tel:+15736803992">(573) 680-3992</a>
+  </div>
+</footer>
+
+<div class="callbar">
+  <a class="btn" href="tel:+15736803992">Call us</a>
+  <a class="btn outline" href="sms:+15736803992">Text us</a>
+</div>
+
+<script type="module" src="/logo3d.js?v=20261005d"></script>
+</body>
+</html>
