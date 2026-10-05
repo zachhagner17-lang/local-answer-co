@@ -271,3 +271,10 @@ h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.06; letter-spacing: -0.
 .guide blockquote { margin: 0 0 14px; padding: 14px 18px; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 8px; }
 .guide .source { font-size: 15px; color: var(--muted); }
 .guide .promise { margin-bottom: 16px; }
+
+/* Guide pages: on wide screens the words leave room on the right for the moving logo */
+.guide-hero h1 { text-wrap: balance; }
+@media (min-width: 901px) {
+  .guide-hero .wrap > h1, .guide-hero .wrap > p { max-width: min(34em, calc(100% - 220px)); }
+  .guide-hero .wrap > h1 { max-width: calc(100% - 220px); }
+}
