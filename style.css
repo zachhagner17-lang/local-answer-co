@@ -174,3 +174,34 @@ nav.menu a:hover, nav.menu a[aria-current="page"] { border-bottom-color: var(--g
 /* Home hero: company name, gold descriptor, bold lead line */
 .hero h1 .gold { display: block; color: var(--gold); }
 .hero p.lead { font-size: clamp(20px, 2.4vw, 25px); font-weight: 700; color: var(--bone); margin: 0 0 14px; }
+
+/* Skip link and keyboard focus rings */
+.skip { position: absolute; left: 16px; top: -100px; z-index: 100; background: var(--navy); color: var(--bone); font-weight: 700; padding: 10px 16px; border-radius: 0 0 8px 8px; text-decoration: none; }
+.skip:focus { top: 0; }
+a:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+.hero a:focus-visible, .stat a:focus-visible, .callbar a:focus-visible, .skip:focus-visible { outline-color: var(--gold); }
+
+/* Wide screens: the header (menu and phone number) stays on screen */
+@media (min-width: 761px) {
+  header { position: sticky; top: 0; z-index: 50; background: var(--bone); }
+  html { scroll-padding-top: 96px; }
+}
+
+/* Phones: Call and Text buttons always at the bottom of the screen */
+.callbar { display: none; }
+@media (max-width: 760px) {
+  .call { padding: 6px 0; }
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .callbar {
+    display: flex; gap: 10px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: var(--navy); padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    box-shadow: 0 -2px 12px rgba(11, 31, 58, 0.25);
+  }
+  .callbar .btn { flex: 1 1 0; text-align: center; font-size: 17px; padding: 12px 10px; }
+  .callbar .btn.outline { color: var(--bone); border-color: var(--gold); padding: 10px; }
+  .callbar .btn.outline:hover, .callbar .btn.outline:focus-visible { background: rgba(196, 163, 90, 0.15); }
+}
+
+/* Contact: email line under the Call and Text buttons */
+.hero p.mail { margin: 18px 0 0; font-size: 18px; }
+.hero p.mail a { color: var(--gold); font-weight: 700; }
