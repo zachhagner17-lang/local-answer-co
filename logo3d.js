@@ -13,31 +13,66 @@ const TAU = Math.PI * 2;
 const root = document.documentElement;
 const hero = document.querySelector('.hero');
 const heroBox = document.getElementById('hero3d') || document.querySelector('.page-3d');
-const storyBox = document.getElementById('story3d');
-const stage = document.querySelector('.story-stage');
 const clamp01 = v => Math.min(1, Math.max(0, v));
 const pointer = { x: 0, y: 0 };
-const fallBack = () => root.classList.remove('has-3d', 'has-story', 'wait-3d');
+const fallBack = () => root.classList.remove('has-3d', 'wait-3d');
 
 if (heroBox && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  if (storyBox) reveal();
+  if (document.getElementById('hero3d')) reveal();  // home page only
   // Load the 3D once the page itself has finished, so the words and buttons come first.
   const later = () => (window.requestIdleCallback || setTimeout)(() => start().catch(fallBack));
   document.readyState === 'complete' ? later() : addEventListener('load', later, { once: true });
 }
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) depth();
 
 // Sections fade up as they scroll into view.
 function reveal() {
-  const els = document.querySelectorAll('main section h2, .intro, .why-now p, .stat, .steps-flow .step, .fixlist li, .promise, .trades li, main section > .wrap > p');
+  const els = document.querySelectorAll('main section h2, .intro, .why-now p, .stat, .steps-flow .step, .fixlist li, .promise, .trades li, main section > .wrap > p, .person');
   const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    el.classList.add('in');
+    io.unobserve(el);
+    setTimeout(() => { el.classList.remove('reveal'); el.style.transitionDelay = ''; }, 1500);  // so the tilt below answers at once
   }), { rootMargin: '0px 0px -6% 0px' });
   els.forEach(el => {
-    if (el.matches('li, .steps-flow .step')) el.style.transitionDelay = Math.min(6, [...el.parentNode.children].indexOf(el)) * 60 + 'ms';
+    if (el.matches('li, .steps-flow .step, .person')) el.style.transitionDelay = Math.min(6, [...el.parentNode.children].indexOf(el)) * 60 + 'ms';
     el.classList.add('reveal');
     io.observe(el);
   });
   root.classList.add('has-motion');
+}
+
+// More 3D on every page: the floating objects (example phones, AI-tools stack, profile card, map, report
+// sheets, code card) turn toward the pointer and play once they scroll into view, and cards and photos tilt.
+// Only transforms change, so no word ever moves.
+function depth() {
+  const figs = [...document.querySelectorAll('.ai-phone, .obj3d')];
+  const movers = [...document.querySelectorAll('.phone-3d, .body3d')];
+  if (figs.length) {
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('play'); io.unobserve(e.target); }
+    }), { threshold: 0.35 });
+    figs.forEach(f => { f.classList.add(f.matches('.ai-phone') ? 'phone-anim' : 'anim'); io.observe(f); });
+    let raf = 0, px = 0, py = 0;
+    addEventListener('pointermove', e => {
+      px = e.clientX / innerWidth * 2 - 1;
+      py = e.clientY / innerHeight * 2 - 1;
+      if (!raf) raf = requestAnimationFrame(() => {
+        raf = 0;
+        movers.forEach(m => { m.style.setProperty('--px', px.toFixed(3)); m.style.setProperty('--py', py.toFixed(3)); });
+      });
+    }, { passive: true });
+  }
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  document.querySelectorAll('.step, .tier, .person, .stat').forEach(el => {
+    el.classList.add('tilt');
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `perspective(900px) rotateX(${(-y * 7).toFixed(2)}deg) rotateY(${(x * 9).toFixed(2)}deg) translateZ(6px)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
 }
 
 async function start() {
@@ -122,33 +157,30 @@ function loop(step, isOn) {
   return kick;
 }
 
-// The medallion in the navy band, and on the home page beside the "Your goals come first" cards. One
-// drawing moves to whichever of the two is on screen; in both it floats and turns on its own, and the
-// page scroll only carries it along with everything else.
+// The medallion in the navy band at the top of the page. It floats and turns on its own; the page scroll
+// only carries it along with everything else.
 async function homeScene(THREE, RoomEnvironment) {
   const s = makeStage(THREE, RoomEnvironment, true), m = s.m, canvas = s.canvas;
   canvas.className = 'medallion-canvas';
 
-  // Which box shows the medallion: the hero, the story, or neither (then nothing renders).
+  // Draw only while the band is on screen.
   let active = null;
-  const vis = { hero: false, story: false }, pt = { x: 0, y: 0 };
+  const vis = { hero: false }, pt = { x: 0, y: 0 };
   const cur = { e: 1.4, yaw: -1.2, pitch: 0.3, lift: 0, glow: 0, scan: -1 };  // starts apart, then assembles
 
   const resize = () => s.fit(canvas.parentElement, 1.12);
 
   function pick() {
-    const storyOn = vis.story && storyBox && getComputedStyle(storyBox).display !== 'none';
-    const next = storyOn ? 'story' : vis.hero && !heroBox.classList.contains('off') ? 'hero' : null;
+    const next = vis.hero && !heroBox.classList.contains('off') ? 'hero' : null;
     if (next === active) return;
     active = next;
     if (!next) return;
-    (next === 'story' ? storyBox : heroBox).appendChild(canvas);
+    heroBox.appendChild(canvas);
     resize();
     kick();
   }
 
   function targets() {
-    if (active === 'story') return { e: 0, yaw: 0, pitch: 0.06, lift: 0, glow: 0, scan: -1 };
     const r = hero.getBoundingClientRect(), hp = clamp01(-r.top / r.height);
     return { e: 0, yaw: 0, pitch: -0.06 + hp * 0.5, lift: hp * 0.6, glow: 0, scan: -1 };
   }
@@ -202,16 +234,14 @@ async function homeScene(THREE, RoomEnvironment) {
   root.classList.remove('wait-3d');
   clearOfWords();
   document.fonts.ready.then(clearOfWords);
-  if (stage && stage.getBoundingClientRect().top > innerHeight) root.classList.add('has-story');
   requestAnimationFrame(() => canvas.classList.add('on'));
   active = null;
 
   const io = new IntersectionObserver(entries => {
-    entries.forEach(en => { vis[en.target === hero ? 'hero' : 'story'] = en.isIntersecting; });
+    entries.forEach(en => { vis.hero = en.isIntersecting; });
     pick();
   }, { rootMargin: '80px 0px' });
   io.observe(hero);
-  if (stage) io.observe(stage);
 }
 
 function buildMedallion(THREE) {

@@ -98,7 +98,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script>/* The moving logo replaces the still one in the hero; hide the still one while it loads (back after 10 s if it never does) */ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('wait-3d'); setTimeout(function () { document.documentElement.classList.remove('wait-3d'); }, 10000); }</script>
-<link rel="stylesheet" href="/style.css?v=20261005d">
+<link rel="stylesheet" href="/style.css?v=20261007d">
 </head>
 <body>
 <a class="skip" href="#top">Skip to main content</a>
@@ -122,6 +122,21 @@
       <p>People with iPhones find businesses in Apple Maps and through Siri. Apple Business Connect is Apple's free way to control what they see about yours.</p>
     </div>
   </div>
+
+  <section class="showcase">
+    <div class="wrap">
+      <figure class="obj3d map3d">
+        <div class="body3d mapbox" aria-hidden="true">
+          <div class="map">
+            <span class="road r1"></span><span class="road r2"></span><span class="road r3"></span>
+            <span class="pin p1"></span><span class="pin p2"></span><span class="pin p3"></span>
+            <span class="pin you"><b>Your business?</b></span>
+          </div>
+        </div>
+        <figcaption>Example map. Is your business on it?</figcaption>
+      </figure>
+    </div>
+  </section>
 
   <section>
     <div class="wrap prose guide">
@@ -198,6 +213,6 @@
   <a class="btn outline" href="sms:+15736803992">Text us</a>
 </div>
 
-<script type="module" src="/logo3d.js?v=20261005d"></script>
+<script type="module" src="/logo3d.js?v=20261007d"></script>
 </body>
 </html>

@@ -106,7 +106,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script>/* The moving logo replaces the still one in the hero; hide the still one while it loads (back after 10 s if it never does) */ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('wait-3d'); setTimeout(function () { document.documentElement.classList.remove('wait-3d'); }, 10000); }</script>
-<link rel="stylesheet" href="/style.css?v=20261005d">
+<link rel="stylesheet" href="/style.css?v=20261007d">
 <style>.data-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.95rem}.data-table th,.data-table td{padding:.5rem .6rem;border-bottom:1px solid rgba(11,31,58,.15);text-align:left;vertical-align:top}.data-table th{color:#0B1F3A}</style>
 </head>
 <body>
@@ -131,6 +131,29 @@
       <p>We asked ChatGPT, Google's AI Mode, Gemini and Perplexity who to hire, the way a homeowner would. Then we checked what the contractors they named had that the others didn't.</p>
     </div>
   </div>
+
+  <section class="showcase">
+    <div class="wrap">
+      <figure class="ai-phone">
+        <div class="phone-3d">
+          <div class="phone-screen">
+            <p class="chat-top"><span class="chat-dot" aria-hidden="true"></span>AI answer <em>Example</em></p>
+            <p class="bubble you">Who's the best contractor near me?</p>
+            <div class="bubble ai">
+              <p>Here are a few well-reviewed contractors near you:</p>
+              <ol>
+                <li><b>Business A Construction</b>: clear quotes and steady communication</li>
+                <li><b>Business B Construction</b>: known for kitchen and bath remodels</li>
+                <li><b>Business C Construction</b>: trusted for additions and decks</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <p class="ai-ask">Is your business on the list?</p>
+        <figcaption>Example of an AI answer, like ChatGPT's. The business names are made up.</figcaption>
+      </figure>
+    </div>
+  </section>
 
   <section>
     <div class="wrap prose guide">
@@ -244,6 +267,6 @@
   <a class="btn outline" href="sms:+15736803992">Text us</a>
 </div>
 
-<script type="module" src="/logo3d.js?v=20261005d"></script>
+<script type="module" src="/logo3d.js?v=20261007d"></script>
 </body>
 </html>

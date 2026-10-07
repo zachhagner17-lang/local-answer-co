@@ -227,7 +227,6 @@ h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.06; letter-spacing: -0.
 .has-3d .hero-3d svg.big, .wait-3d .hero-3d svg.big { visibility: hidden; }
 .medallion-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 1.2s ease; }
 .medallion-canvas.on { opacity: 1; }
-.story-3d { display: none; position: relative; }
 @media (min-width: 761px) and (max-width: 1000px) {
   .hero-3d { width: 190px; height: 190px; }
   .hero-3d svg.big { width: 140px; height: 140px; }
@@ -239,14 +238,35 @@ h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.06; letter-spacing: -0.
   .hero-3d svg.big { width: 108px; height: 108px; }
 }
 
-/* Home: "Your goals come first" with the medallion beside the cards. It scrolls with the page like
-   everything else (has-story is set only when the visitor hasn't reached it yet, so nothing jumps). */
-.has-story .story-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: center; gap: 40px; }
-.has-story .story-steps { grid-template-columns: 1fr; }
-.has-story .story-3d { display: block; height: 340px; }
+/* Home: "Your goals come first": the three cards beside a 3D "Your goals" clipboard (the customer's own goals,
+   in the section's words; no checkmarks, since nothing is promised as done) */
+.story-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: center; gap: 40px; }
+.story-steps { grid-template-columns: 1fr; }
+.clip { width: 290px; padding: 34px 22px 22px; border-radius: 16px; background: linear-gradient(160deg, #24395c, #0B1F3A 70%);
+  box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.5), 24px 30px 52px rgba(11, 31, 58, 0.32); }
+.clip::before { content: ""; position: absolute; inset: 22px 14px 14px; border-radius: 8px; background: var(--card);
+  box-shadow: 0 2px 0 var(--line), 0 4px 0 #efe8db; transform: translateZ(4px); }
+.clip > * { position: relative; transform: translateZ(10px); }
+.clip-top { position: absolute; left: 50%; top: 10px; width: 96px; height: 26px; margin-left: -48px; border-radius: 8px;
+  background: linear-gradient(#d9bd7a, #C4A35A 60%, #83692F); box-shadow: 0 4px 8px rgba(11, 31, 58, 0.35); transform: translateZ(18px); }
+.clip-title { margin: 6px 0 14px; text-align: center; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 700; font-size: 30px; color: var(--navy); }
+.goals { list-style: none; margin: 0 0 14px; padding: 0 6px; }
+.goals li { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; padding: 10px 12px; border-radius: 10px;
+  background: #fff; border: 1px solid var(--line); font-weight: 700; color: var(--navy); line-height: 1.3; }
+.goals i { flex: none; width: 24px; height: 24px; border-radius: 50%;
+  background: radial-gradient(circle, var(--gold) 0 3px, transparent 3.5px 6px, var(--gold) 6.5px 8.5px, transparent 9px 11px, var(--gold-text) 11.5px 12px, transparent 12.5px); }
+.clip-note { margin: 0; text-align: center; font-size: 14px; font-style: italic; color: var(--muted); }
+.goals3d.anim .goals li { opacity: 0; transform: translateX(-14px); transition: opacity .5s ease, transform .5s ease; }
+.goals3d.play .goals li { opacity: 1; transform: none; }
+.goals3d.play .goals li:nth-child(1) { transition-delay: .3s; } .goals3d.play .goals li:nth-child(2) { transition-delay: .7s; }
+.goals3d.play .goals li:nth-child(3) { transition-delay: 1.1s; }
+.goals3d.anim .goals i { transform: scale(0); transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); }
+.goals3d.play .goals i { transform: scale(1); }
+.goals3d.play .goals li:nth-child(1) i { transition-delay: .6s; } .goals3d.play .goals li:nth-child(2) i { transition-delay: 1s; }
+.goals3d.play .goals li:nth-child(3) i { transition-delay: 1.4s; }
 @media (max-width: 760px) {
-  .has-story .story-grid { grid-template-columns: 1fr; gap: 8px; }
-  .has-story .story-3d { order: -1; height: 220px; margin: 0 -16px; }
+  .story-grid { grid-template-columns: 1fr; gap: 26px; }
+  .story-grid .goals3d { order: -1; }
 }
 
 /* Other pages: the moving logo in the navy band (logo3d.js). It never takes room from the words: on wide
@@ -278,3 +298,184 @@ h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.06; letter-spacing: -0.
   .guide-hero .wrap > h1, .guide-hero .wrap > p { max-width: min(34em, calc(100% - 220px)); }
   .guide-hero .wrap > h1 { max-width: calc(100% - 220px); }
 }
+
+/* More 3D (2026-10-07). Home: an example AI answer on a 3D phone (labeled "Example", made-up business names)
+   and stock photos of kinds of business. Every page: cards and photos tilt toward the pointer (logo3d.js). */
+.why-side { display: grid; gap: 26px; justify-items: center; }
+.ai-phone { margin: 0; display: grid; justify-items: center; gap: 8px; perspective: 1100px; }
+.phone-3d {
+  position: relative; width: 250px; padding: 11px; border-radius: 38px;
+  background: linear-gradient(150deg, #24395c, #08162b 60%);
+  box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.55), 26px 34px 56px rgba(11, 31, 58, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: rotateY(calc(-14deg + var(--px, 0) * 9deg)) rotateX(calc(6deg - var(--py, 0) * 6deg));
+  transition: transform .5s ease-out;
+  animation: phone-float 6s ease-in-out infinite;
+}
+.phone-3d::before { content: ""; position: absolute; top: 18px; left: 50%; width: 64px; height: 7px; margin-left: -32px; border-radius: 4px; background: #08162b; z-index: 2; }
+.phone-3d::after { content: ""; position: absolute; inset: 11px; border-radius: 28px; pointer-events: none;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 38%); }
+@keyframes phone-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+.phone-screen { background: var(--card); border-radius: 28px; padding: 34px 13px 18px; min-height: 410px; font-size: 13.5px; line-height: 1.42; color: var(--ink); }
+.chat-top { display: flex; align-items: center; gap: 7px; margin: 0 0 14px; font-weight: 700; font-size: 12.5px; color: var(--muted); }
+.chat-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--jade); }
+.chat-top em { margin-left: auto; font-style: normal; color: var(--gold-text); border: 1px solid var(--gold); border-radius: 999px; padding: 1px 8px; }
+.bubble { margin: 0 0 12px; border-radius: 16px; padding: 10px 12px; }
+.bubble.you { margin-left: 28px; background: var(--navy); color: var(--bone); border-bottom-right-radius: 4px; }
+.bubble.ai { background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.bubble.ai p { margin: 0 0 8px; }
+.bubble.ai ol { margin: 0; padding-left: 18px; }
+.bubble.ai li { margin: 0 0 7px; }
+.bubble.ai li:last-child { margin-bottom: 0; }
+.ai-ask { margin: 10px 0 0; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 700; font-size: 25px; color: var(--navy); text-align: center; }
+.ai-phone figcaption { font-size: 13px; color: var(--muted); text-align: center; max-width: 260px; }
+.phone-anim .bubble.you, .phone-anim .bubble.ai p, .phone-anim .bubble.ai li { opacity: 0; transform: translateY(8px); transition: opacity .5s ease, transform .5s ease; }
+.phone-anim.play .bubble.you { opacity: 1; transform: none; transition-delay: .2s; }
+.phone-anim.play .bubble.ai p { opacity: 1; transform: none; transition-delay: 1s; }
+.phone-anim.play .bubble.ai li { opacity: 1; transform: none; }
+.phone-anim.play .bubble.ai li:nth-child(1) { transition-delay: 1.6s; }
+.phone-anim.play .bubble.ai li:nth-child(2) { transition-delay: 2.1s; }
+.phone-anim.play .bubble.ai li:nth-child(3) { transition-delay: 2.6s; }
+
+.people { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 0 0 8px; perspective: 1200px; }
+.person { position: relative; margin: 0; border-radius: 14px; overflow: hidden; background: var(--navy); box-shadow: 0 16px 34px rgba(11, 31, 58, 0.18); }
+.person img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+.person figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 14px 11px; color: var(--bone); font-weight: 700; font-size: 15px;
+  background: linear-gradient(rgba(11, 31, 58, 0), rgba(11, 31, 58, 0.9) 55%); }
+.photo-note { margin: 0 0 18px; font-size: 13px; color: var(--muted); }
+.has-motion .person.reveal { opacity: 0; transform: perspective(900px) rotateX(22deg) translateY(34px); }
+.has-motion .person.reveal.in { opacity: 1; transform: none; }
+.tilt { transition: transform .18s ease-out, box-shadow .18s ease-out; transform-style: preserve-3d; }
+.tilt:hover { box-shadow: 0 22px 44px rgba(11, 31, 58, 0.2); }
+@media (max-width: 760px) {
+  .people { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .person figcaption { font-size: 13.5px; padding: 26px 10px 9px; }
+  .phone-3d { width: 238px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .phone-3d { animation: none; transform: rotateY(-10deg) rotateX(4deg); }
+}
+
+/* 3D objects kit (2026-10-07): floating, pointer-following pieces on every page (logo3d.js adds .anim and
+   .play). Each is labeled "Example" where it's made up; none shows a rating, review count or result. */
+.showcase { padding: 34px 0 6px; }
+.showcase .wrap { display: flex; justify-content: center; }
+.obj3d { margin: 0; display: grid; justify-items: center; gap: 10px; perspective: 1100px; }
+.obj3d figcaption { font-size: 13px; color: var(--muted); text-align: center; max-width: 300px; }
+.body3d { position: relative; transform-style: preserve-3d; transition: transform .5s ease-out;
+  transform: rotateY(calc(-12deg + var(--px, 0) * 9deg)) rotateX(calc(6deg - var(--py, 0) * 6deg));
+  animation: phone-float 6s ease-in-out infinite; }
+.tag-example { font-style: normal; font-size: 11.5px; font-weight: 700; color: var(--gold-text); border: 1px solid var(--gold); border-radius: 999px; padding: 1px 8px; }
+
+/* AI tools stack */
+.stack { width: 270px; height: 210px; }
+.tool { position: absolute; left: 25px; top: 45px; width: 220px; height: 120px; padding: 14px 16px; border-radius: 16px;
+  background: var(--card); border: 1px solid var(--line); box-shadow: 0 16px 30px rgba(11, 31, 58, 0.16);
+  font-weight: 800; color: var(--navy); transition: transform .9s cubic-bezier(.2, .8, .2, 1); }
+.tool i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.tool::after { content: ""; position: absolute; left: 16px; right: 40px; top: 50px; height: 44px;
+  background: repeating-linear-gradient(transparent 0 6px, var(--line) 6px 14px); border-radius: 4px; opacity: .9; }
+.tool.t1 { transform: translate3d(0, 0, 60px); } .tool.t1 i { background: var(--jade); }
+.tool.t2 { transform: translate3d(0, 0, 20px); } .tool.t2 i { background: var(--gold); }
+.tool.t3 { transform: translate3d(0, 0, -20px); } .tool.t3 i { background: var(--navy); }
+.tool.t4 { transform: translate3d(0, 0, -60px); } .tool.t4 i { background: var(--gold-text); }
+.tools3d.play .tool.t1 { transform: translate3d(-34px, -40px, 60px) rotateZ(-4deg); }
+.tools3d.play .tool.t2 { transform: translate3d(-12px, -14px, 20px) rotateZ(-1deg); }
+.tools3d.play .tool.t3 { transform: translate3d(12px, 12px, -20px) rotateZ(1deg); }
+.tools3d.play .tool.t4 { transform: translate3d(34px, 38px, -60px) rotateZ(4deg); }
+
+/* Google profile card */
+.gcard { width: 270px; padding: 16px; border-radius: 18px; background: var(--card); border: 1px solid var(--line);
+  box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.4), 22px 28px 48px rgba(11, 31, 58, 0.25); font-size: 13.5px; }
+.g-top { display: flex; align-items: center; justify-content: space-between; margin: 0 0 2px; }
+.g-name { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 700; font-size: 22px; color: var(--navy); }
+.g-cat { margin: 0 0 10px; color: var(--muted); }
+.g-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 10px; }
+.g-photos span { height: 46px; border-radius: 8px; background: linear-gradient(135deg, #c9d6d1, #2F6F5E); }
+.g-photos span:nth-child(2) { background: linear-gradient(135deg, #e7d8b4, #C4A35A); }
+.g-photos span:nth-child(3) { background: linear-gradient(135deg, #b9c4d6, #0B1F3A); }
+.g-btns { display: flex; gap: 6px; margin-bottom: 12px; }
+.g-btns span { flex: 1; text-align: center; padding: 6px 0; border-radius: 999px; border: 1px solid var(--line); color: var(--navy); font-weight: 700; font-size: 12px; }
+.g-checks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+.g-checks li { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ink); }
+.g-checks li::before { content: "\2713"; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--jade); color: var(--bone); font-size: 11px; }
+.gbp3d.anim .g-checks li { opacity: 0; transform: translateX(-8px); transition: opacity .4s ease, transform .4s ease; }
+.gbp3d.play .g-checks li { opacity: 1; transform: none; }
+.gbp3d.play .g-checks li:nth-child(1) { transition-delay: .4s; } .gbp3d.play .g-checks li:nth-child(2) { transition-delay: .8s; }
+.gbp3d.play .g-checks li:nth-child(3) { transition-delay: 1.2s; } .gbp3d.play .g-checks li:nth-child(4) { transition-delay: 1.6s; }
+.gbp3d.play .g-checks li:nth-child(5) { transition-delay: 2s; }
+
+/* 3D map: the map lies back like a table, the pins stand up */
+.mapbox { width: 300px; height: 230px; }
+.map { position: absolute; inset: 0; border-radius: 18px; transform: rotateX(48deg); transform-style: preserve-3d;
+  background: linear-gradient(135deg, #e9e3d4, #d9e4de); border: 1px solid var(--line); box-shadow: 0 30px 50px rgba(11, 31, 58, 0.22); }
+.road { position: absolute; background: #fbf8f2; border-radius: 6px; }
+.road.r1 { left: 0; right: 0; top: 42%; height: 14px; } .road.r2 { top: 0; bottom: 0; left: 30%; width: 12px; }
+.road.r3 { top: 0; bottom: 0; left: 72%; width: 9px; transform: skewX(-12deg); }
+.pin { position: absolute; width: 22px; height: 22px; margin: -22px 0 0 -11px; border-radius: 50% 50% 50% 0; background: var(--navy);
+  transform-origin: 50% 100%; transform: rotateX(-48deg) rotateZ(-45deg); transition: transform .6s cubic-bezier(.3, 1.6, .5, 1), opacity .4s; }
+.pin.p1 { left: 18%; top: 30%; } .pin.p2 { left: 52%; top: 70%; } .pin.p3 { left: 84%; top: 34%; }
+.pin.you { left: 46%; top: 30%; width: 30px; height: 30px; margin: -30px 0 0 -15px; background: var(--gold); }
+.pin.you b { position: absolute; left: 34px; top: -6px; white-space: nowrap; transform: rotateZ(45deg); transform-origin: 0 50%;
+  font-size: 12px; color: var(--navy); background: var(--card); border: 1px solid var(--gold); padding: 2px 8px; border-radius: 999px; }
+.map3d.anim .pin { opacity: 0; transform: rotateX(-48deg) rotateZ(-45deg) translate(-60px, -60px); }
+.map3d.play .pin { opacity: 1; transform: rotateX(-48deg) rotateZ(-45deg); }
+.map3d.play .pin.p1 { transition-delay: .2s; } .map3d.play .pin.p2 { transition-delay: .45s; }
+.map3d.play .pin.p3 { transition-delay: .7s; } .map3d.play .pin.you { transition-delay: 1.1s; animation: pin-pulse 2.4s ease-in-out 2s infinite; }
+@keyframes pin-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 163, 90, 0.6); } 50% { box-shadow: 0 0 0 10px rgba(196, 163, 90, 0); } }
+
+/* Report sheets */
+.sheets { width: 270px; height: 250px; }
+.sheet { position: absolute; inset: 0; padding: 16px; border-radius: 12px; background: #fff; border: 1px solid var(--line);
+  box-shadow: 0 16px 34px rgba(11, 31, 58, 0.16); transition: transform .9s cubic-bezier(.2, .8, .2, 1); }
+.sheet.s2 { transform: translate3d(0, 0, -30px); background: var(--card); }
+.sheet.s3 { transform: translate3d(0, 0, -60px); background: var(--bone-deep); }
+.report3d.play .sheet.s2 { transform: translate3d(26px, -18px, -30px) rotateZ(5deg); }
+.report3d.play .sheet.s3 { transform: translate3d(50px, -34px, -60px) rotateZ(10deg); }
+.sh-title { margin: 0 0 4px; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 700; font-size: 20px; color: var(--navy); }
+.sh-sub { margin: 0 0 12px; font-size: 12px; color: var(--muted); }
+.shots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.shots span { display: grid; align-content: end; height: 62px; padding: 6px; border-radius: 8px; font-size: 11.5px; font-weight: 700; color: var(--navy);
+  background: repeating-linear-gradient(var(--card) 0 7px, var(--line) 7px 9px); border: 1px solid var(--line); }
+
+/* Code card */
+.codecard { width: 300px; padding: 14px 16px; border-radius: 14px; background: var(--navy); box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.5), 22px 28px 48px rgba(11, 31, 58, 0.3); }
+.codecard pre { margin: 0; font: 12.5px/1.6 Consolas, "Courier New", monospace; color: var(--bone); white-space: pre; }
+.codecard .k { color: var(--gold); }
+.code3d.anim .codecard .ln { opacity: 0; transition: opacity .3s ease; }
+.code3d.play .codecard .ln { opacity: 1; }
+
+/* Text-message phone (reviews, contact) */
+.sms-head { margin: 0 0 14px; text-align: center; font-size: 12px; color: var(--muted); }
+.sms-head b { display: block; font-size: 13.5px; color: var(--navy); }
+.bubble.sent { margin-left: 22px; background: var(--jade); color: #fff; border-bottom-right-radius: 4px; }
+.sms-meta { margin: -6px 0 0; text-align: right; font-size: 11px; color: var(--muted); }
+.obj3d.anim .bubble { opacity: 0; transform: translateY(8px); transition: opacity .5s ease, transform .5s ease; }
+.obj3d.play .bubble { opacity: 1; transform: none; transition-delay: .4s; }
+
+@media (max-width: 760px) {
+  .showcase { padding: 26px 0 0; }
+  .mapbox { width: 280px; height: 210px; }
+  .codecard { width: 290px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .body3d { animation: none; transform: rotateY(-8deg) rotateX(4deg); }
+}
+
+/* Home: 3D objects inside "How it works" and "What we fix" */
+.showcase-inline { display: flex; justify-content: center; margin: 4px 0 30px; }
+.fixlist + .showcase-inline { margin: 34px 0 0; }
+
+/* Phones: the report sheets fan out less, and no floating object can ever make the page scroll sideways */
+.showcase, .showcase-inline { overflow-x: clip; }
+@media (max-width: 760px) {
+  .sheets { width: 240px; }
+  .report3d.play .sheet.s2 { transform: translate3d(16px, -14px, -30px) rotateZ(4deg); }
+  .report3d.play .sheet.s3 { transform: translate3d(30px, -26px, -60px) rotateZ(7deg); }
+}
+
+/* Map pins stand up off the map instead of sinking into it */
+.pin { transform: translateZ(16px) rotateX(-48deg) rotateZ(-45deg); box-shadow: 3px 6px 10px rgba(11, 31, 58, 0.25); }
+.pin::after { content: ""; position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--bone); }
+.pin.you::after { width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; background: var(--navy); }
+.map3d.anim .pin { transform: translateZ(16px) rotateX(-48deg) rotateZ(-45deg) translate(-60px, -60px); }
+.map3d.play .pin { transform: translateZ(16px) rotateX(-48deg) rotateZ(-45deg); }

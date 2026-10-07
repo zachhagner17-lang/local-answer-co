@@ -105,7 +105,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script>/* The moving logo replaces the still one in the hero; hide the still one while it loads (back after 10 s if it never does) */ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('wait-3d'); setTimeout(function () { document.documentElement.classList.remove('wait-3d'); }, 10000); }</script>
-<link rel="stylesheet" href="style.css?v=20261005d">
+<link rel="stylesheet" href="style.css?v=20261007d">
 </head>
 <body>
 <a class="skip" href="#top">Skip to main content</a>
@@ -147,11 +147,31 @@
         <p>We believe AI is where the internet was in its early days: already useful, and about to become how most people find what they need. We're right at the start, and younger customers are leading the way.</p>
         <p>Reviews, listings and mentions build month by month, so the businesses that start now will have a head start as more customers turn to AI. And because these tools read the same things Google does, the work helps you on Google too. It's not either/or.</p>
       </div>
-      <aside class="stat">
-        <b>About 2 in 3</b>
-        <span>adults under 30 use AI chatbots, and about half of adults under 50 use them to look things up.</span>
-        <small>Source: <a href="https://www.pewresearch.org/internet/2026/06/17/how-opinions-and-use-of-ai-differ-by-age/">Pew Research Center</a>, survey of U.S. adults, February 2026</small>
-      </aside>
+      <div class="why-side">
+        <figure class="ai-phone">
+          <div class="phone-3d">
+            <div class="phone-screen">
+              <p class="chat-top"><span class="chat-dot" aria-hidden="true"></span>AI answer <em>Example</em></p>
+              <p class="bubble you">Who's the best plumber near me?</p>
+              <div class="bubble ai">
+                <p>Here are a few well-reviewed plumbers near you:</p>
+                <ol>
+                  <li><b>Business A Plumbing</b>: fast emergency service and strong reviews</li>
+                  <li><b>Business B Plumbing</b>: known for clear, upfront pricing</li>
+                  <li><b>Business C Plumbing</b>: trusted for drains and water heaters</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <p class="ai-ask">Is your business on the list?</p>
+          <figcaption>Example of an AI answer, like ChatGPT's. The business names are made up.</figcaption>
+        </figure>
+        <aside class="stat">
+          <b>About 2 in 3</b>
+          <span>adults under 30 use AI chatbots, and about half of adults under 50 use them to look things up.</span>
+          <small>Source: <a href="https://www.pewresearch.org/internet/2026/06/17/how-opinions-and-use-of-ai-differ-by-age/">Pew Research Center</a>, survey of U.S. adults, February 2026</small>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -178,7 +198,18 @@
         </div>
       </div>
       </div>
-      <div class="story-3d" id="story3d"></div>
+      <figure class="obj3d goals3d">
+        <div class="body3d clip">
+          <span class="clip-top" aria-hidden="true"></span>
+          <p class="clip-title">Your goals</p>
+          <ul class="goals">
+            <li><i aria-hidden="true"></i>More calls</li>
+            <li><i aria-hidden="true"></i>A fuller schedule</li>
+            <li><i aria-hidden="true"></i>Being the first name people hear when they ask</li>
+          </ul>
+          <p class="clip-note">We build the work around your goals.</p>
+        </div>
+      </figure>
     </div>
     </div>
   </section>
@@ -186,6 +217,17 @@
   <section class="soft">
     <div class="wrap">
       <h2>How it works</h2>
+      <div class="showcase-inline">
+        <figure class="obj3d tools3d">
+          <div class="body3d stack" aria-hidden="true">
+            <span class="tool t4"><i></i>Perplexity</span>
+            <span class="tool t3"><i></i>Gemini</span>
+            <span class="tool t2"><i></i>Google</span>
+            <span class="tool t1"><i></i>ChatGPT</span>
+          </div>
+          <figcaption>The 4 AI tools we check: ChatGPT, Google, Gemini and Perplexity.</figcaption>
+        </figure>
+      </div>
       <div class="steps steps-flow">
         <div class="step">
           <div class="num">1</div>
@@ -230,6 +272,18 @@
         <li>The same name, address and phone everywhere you're listed</li>
         <li>Getting mentioned on other local pages</li>
       </ul>
+      <div class="showcase-inline">
+        <figure class="obj3d gbp3d">
+          <div class="body3d gcard">
+            <p class="g-top"><span class="g-name">Your Business</span><em class="tag-example">Example</em></p>
+            <p class="g-cat">Plumber · Open now</p>
+            <div class="g-photos" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="g-btns" aria-hidden="true"><span>Call</span><span>Website</span><span>Directions</span></div>
+            <ul class="g-checks"><li>Category</li><li>Services</li><li>Service area</li><li>Hours</li><li>Photos</li></ul>
+          </div>
+          <figcaption>Example of a complete Google Business Profile.</figcaption>
+        </figure>
+      </div>
       <p>That's local SEO for small businesses, done with AI answers in mind. More on each: <a href="/google-business-profile-optimization/">Google Business Profile optimization</a>, <a href="/guides/get-more-google-reviews/">getting more Google reviews</a>, <a href="/guides/bing-places/">Bing Places</a>, <a href="/guides/apple-business-connect/">Apple Business Connect</a>, <a href="/guides/local-business-schema/">local business schema</a> and <a href="/ai-search-optimization/">AI search optimization (GEO and AEO)</a>.</p>
     </div>
   </section>
@@ -248,6 +302,15 @@
     <div class="wrap">
       <h2>Who we work with</h2>
       <p>We're built for businesses of every size, from multi-location companies to the independent shop down the street. If your customers look for you on AI or Google, we can help. For example:</p>
+      <div class="people">
+        <figure class="person"><img src="img/people/contractor.webp" alt="Construction worker cutting lumber on a job site" width="640" height="480" loading="lazy" decoding="async"><figcaption>Contractors and trades</figcaption></figure>
+        <figure class="person"><img src="img/people/restaurant.webp" alt="Restaurant owner in an apron at the counter" width="640" height="480" loading="lazy" decoding="async"><figcaption>Restaurants and cafés</figcaption></figure>
+        <figure class="person"><img src="img/people/salon.webp" alt="Hairstylist drying a customer's hair" width="640" height="480" loading="lazy" decoding="async"><figcaption>Salons and barbers</figcaption></figure>
+        <figure class="person"><img src="img/people/clinic.webp" alt="Dentist talking with a patient" width="640" height="480" loading="lazy" decoding="async"><figcaption>Dentists and clinics</figcaption></figure>
+        <figure class="person"><img src="img/people/auto-shop.webp" alt="Mechanic working under a car's hood" width="640" height="480" loading="lazy" decoding="async"><figcaption>Auto shops</figcaption></figure>
+        <figure class="person"><img src="img/people/boutique.webp" alt="Owner of a small clothing shop" width="640" height="480" loading="lazy" decoding="async"><figcaption>Shops and boutiques</figcaption></figure>
+      </div>
+      <p class="photo-note">Stock photos.</p>
       <ul class="trades">
         <li><a href="/guides/local-seo-for-contractors/">Contractors and trades</a></li><li>Restaurants and cafés</li><li>Salons and barbers</li>
         <li>Dentists and clinics</li><li>Lawyers and accountants</li><li>Real estate agents</li>
@@ -278,6 +341,6 @@
   <a class="btn outline" href="sms:+15736803992">Text us</a>
 </div>
 
-<script type="module" src="logo3d.js?v=20261005d"></script>
+<script type="module" src="logo3d.js?v=20261007d"></script>
 </body>
 </html>

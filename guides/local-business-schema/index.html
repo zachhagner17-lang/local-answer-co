@@ -106,7 +106,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script>/* The moving logo replaces the still one in the hero; hide the still one while it loads (back after 10 s if it never does) */ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('wait-3d'); setTimeout(function () { document.documentElement.classList.remove('wait-3d'); }, 10000); }</script>
-<link rel="stylesheet" href="/style.css?v=20261005d">
+<link rel="stylesheet" href="/style.css?v=20261007d">
 </head>
 <body>
 <a class="skip" href="#top">Skip to main content</a>
@@ -130,6 +130,22 @@
       <p>LocalBusiness schema is a small block of code that tells search engines your business name, address, phone and hours. It's worth having. It isn't magic.</p>
     </div>
   </div>
+
+  <section class="showcase">
+    <div class="wrap">
+      <figure class="obj3d code3d">
+        <div class="body3d codecard" aria-hidden="true"><pre>
+<span class="ln" style="transition-delay:0.30s">{</span>
+<span class="ln" style="transition-delay:0.55s">  <span class="k">"@context"</span>: "https://schema.org",</span>
+<span class="ln" style="transition-delay:0.80s">  <span class="k">"@type"</span>: "Plumber",</span>
+<span class="ln" style="transition-delay:1.05s">  <span class="k">"name"</span>: "Your Business",</span>
+<span class="ln" style="transition-delay:1.30s">  <span class="k">"telephone"</span>: "+1-555-555-0123",</span>
+<span class="ln" style="transition-delay:1.55s">  <span class="k">"url"</span>: "https://example.com/"</span>
+<span class="ln" style="transition-delay:1.80s">}</span></pre></div>
+        <figcaption>Example business code (schema.org). One small item on the list, not a magic switch.</figcaption>
+      </figure>
+    </div>
+  </section>
 
   <section>
     <div class="wrap prose guide">
@@ -237,6 +253,6 @@
   <a class="btn outline" href="sms:+15736803992">Text us</a>
 </div>
 
-<script type="module" src="/logo3d.js?v=20261005d"></script>
+<script type="module" src="/logo3d.js?v=20261007d"></script>
 </body>
 </html>
