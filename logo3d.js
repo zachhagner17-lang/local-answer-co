@@ -45,10 +45,11 @@ function reveal() {
 
 // More 3D on every page: the floating objects (example phones, AI-tools stack, profile card, map, report
 // sheets, code card) turn toward the pointer and play once they scroll into view, and cards and photos tilt.
+// On the home page the hero's grid floor and AI-tool ring lean toward the pointer too.
 // Only transforms change, so no word ever moves.
 function depth() {
   const figs = [...document.querySelectorAll('.ai-phone, .obj3d')];
-  const movers = [...document.querySelectorAll('.phone-3d, .body3d')];
+  const movers = [...document.querySelectorAll('.phone-3d, .body3d, .orbit, .hero-floor')];
   if (figs.length) {
     const io = new IntersectionObserver(entries => entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('play'); io.unobserve(e.target); }

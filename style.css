@@ -238,6 +238,66 @@ h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.06; letter-spacing: -0.
   .hero-3d svg.big { width: 108px; height: 108px; }
 }
 
+/* Home hero, more 3D (Zach, 2026-10-07): a gold grid floor drifting toward the viewer, and the 4 AI tools we
+   check circling the medallion in depth, passing behind it and in front. Decoration only: the floor sits
+   behind the words, the ring stays inside the medallion's column, and no word moves. */
+.hero.home { position: relative; overflow: hidden; }
+.hero.home > .wrap { position: relative; z-index: 1; }
+.hero-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 56%; pointer-events: none;
+  perspective: 380px; perspective-origin: calc(50% + var(--px, 0) * 8%) 0;
+  -webkit-mask-image: linear-gradient(transparent, #000 75%); mask-image: linear-gradient(transparent, #000 75%); }
+.hero-floor::before { content: ""; position: absolute; left: -80%; right: -80%; bottom: 0; height: 320%; transform-origin: 50% 100%;
+  transform: rotateX(78deg);
+  background: linear-gradient(rgba(196, 163, 90, 0.2) 2px, transparent 2px) 0 0 / 70px 70px,
+              linear-gradient(90deg, rgba(196, 163, 90, 0.2) 2px, transparent 2px) 0 0 / 70px 70px; }
+.hero-3d { perspective: 1000px; transform-style: preserve-3d; }
+.orbit { position: absolute; left: 50%; top: 50%; width: 0; height: 0; pointer-events: none; transform-style: preserve-3d;
+  --r: 172px; --tz: 68deg; --tx: 14deg;
+  transform: translate3d(calc(var(--px, 0) * 6px), calc(var(--py, 0) * 8px), 0) rotateZ(var(--tz)) rotateX(var(--tx)); }
+.chip { position: absolute; left: -52px; top: -16px; width: 104px; height: 32px; display: flex; align-items: center; justify-content: center;
+  gap: 7px; border-radius: 999px; font-size: 13px; font-weight: 700; line-height: 1; white-space: nowrap; color: var(--bone);
+  background: linear-gradient(160deg, #24426e, #10284a); border: 1px solid rgba(196, 163, 90, 0.75);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --a: calc(var(--i) * 90deg + 45deg);
+  transform: rotateY(var(--a)) translateZ(var(--r)) rotateY(calc(-1 * var(--a))) rotateX(calc(-1 * var(--tx))) rotateZ(calc(-1 * var(--tz))); }
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-floor::before { animation: floor 4s linear infinite; }
+  .chip { animation: orbit 28s linear infinite; animation-delay: calc(var(--i) * -7s); }
+}
+@keyframes floor { from { transform: rotateX(78deg) translateY(0); } to { transform: rotateX(78deg) translateY(70px); } }
+@keyframes orbit {
+  0% { opacity: 1; transform: rotateY(0deg) translateZ(var(--r)) rotateY(0deg) rotateX(calc(-1 * var(--tx))) rotateZ(calc(-1 * var(--tz))); }
+  50% { opacity: 0.55; transform: rotateY(180deg) translateZ(var(--r)) rotateY(-180deg) rotateX(calc(-1 * var(--tx))) rotateZ(calc(-1 * var(--tz))); }
+  100% { opacity: 1; transform: rotateY(360deg) translateZ(var(--r)) rotateY(-360deg) rotateX(calc(-1 * var(--tx))) rotateZ(calc(-1 * var(--tz))); }
+}
+/* Narrower screens: the medallion's column sits near the screen edge, so the ring stands more upright */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .orbit { --tz: 80deg; --tx: 10deg; }
+}
+@media (min-width: 761px) and (max-width: 1000px) {
+  .orbit { --r: 140px; }
+  .chip { left: -46px; top: -14px; width: 92px; height: 28px; font-size: 12px; gap: 6px; }
+}
+@media (max-width: 760px) {
+  .hero-floor { height: 40%; }
+  .orbit { --r: min(118px, calc(50vw - 64px)); --tz: 0deg; --tx: 12deg; }
+  .chip { left: -46px; top: -14px; width: 92px; height: 28px; font-size: 12px; gap: 6px; }
+}
+/* No motion: the four tiles rest two above and two below the medallion (two each side of it on phones) */
+@media (prefers-reduced-motion: reduce) {
+  .orbit { transform: none; --cx: 58px; --cy: 150px; }
+  .chip { transform: translate(calc(var(--sx) * var(--cx)), calc(var(--sy) * var(--cy))); }
+  .chip:nth-child(odd) { --sx: -1; } .chip:nth-child(even) { --sx: 1; }
+  .chip:nth-child(-n+2) { --sy: -1; } .chip:nth-child(n+3) { --sy: 1; }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 761px) and (max-width: 1000px) {
+  .orbit { --cx: 50px; --cy: 125px; }
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 760px) {
+  .orbit { --cx: min(120px, calc(50vw - 54px)); --cy: 22px; }
+}
+
 /* Home: "Your goals come first": the three cards beside a 3D "Your goals" clipboard (the customer's own goals,
    in the section's words; no checkmarks, since nothing is promised as done) */
 .story-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: center; gap: 40px; }
