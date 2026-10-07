@@ -336,6 +336,14 @@ h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.06; letter-spacing: -0.
 .hero.page .wrap { position: relative; }
 .wait-3d .page-3d, .has-3d .page-3d { display: block; position: absolute; right: 16px; top: 50%; width: clamp(126px, 13vw, 170px); height: clamp(126px, 13vw, 170px); transform: translateY(-50%); }
 .page-3d.off { visibility: hidden; }
+/* ...with the home hero's grid floor behind the words, and the AI-tool ring around the logo where logo3d.js
+   finds room for it (Zach, 2026-10-07: "make the other pages' heroes more 3d too") */
+.hero.page { position: relative; overflow: hidden; }
+.hero.page > .wrap { z-index: 1; }
+.page-3d { perspective: 1000px; transform-style: preserve-3d; }
+.page-3d .orbit { display: none; }
+.page-3d.ring .orbit { display: block; }
+.page-3d .chip { left: -46px; top: -14px; width: 92px; height: 28px; font-size: 12px; gap: 6px; }
 @media (max-width: 900px) {
   .wait-3d .page-3d, .has-3d .page-3d { position: relative; right: auto; top: auto; transform: none; width: auto; height: 120px; margin: -10px -16px 10px; }
 }

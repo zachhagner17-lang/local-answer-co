@@ -106,7 +106,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script>/* The moving logo replaces the still one in the hero; hide the still one while it loads (back after 10 s if it never does) */ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('wait-3d'); setTimeout(function () { document.documentElement.classList.remove('wait-3d'); }, 10000); }</script>
-<link rel="stylesheet" href="/style.css?v=20261007e">
+<link rel="stylesheet" href="/style.css?v=20261007f">
 <style>.data-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.95rem}.data-table th,.data-table td{padding:.5rem .6rem;border-bottom:1px solid rgba(11,31,58,.15);text-align:left;vertical-align:top}.data-table th{color:#0B1F3A}</style>
 </head>
 <body>
@@ -125,8 +125,16 @@
 
 <main id="top">
   <div class="hero page guide-hero">
+    <div class="hero-floor" aria-hidden="true"></div>
     <div class="wrap">
-      <div class="page-3d" aria-hidden="true"></div>
+      <div class="page-3d" aria-hidden="true">
+        <div class="orbit">
+          <span class="chip" style="--i:0">ChatGPT</span>
+          <span class="chip" style="--i:1">Google</span>
+          <span class="chip" style="--i:2">Gemini</span>
+          <span class="chip" style="--i:3">Perplexity</span>
+        </div>
+      </div>
       <h1>Local SEO for contractors</h1>
       <p>We asked ChatGPT, Google's AI Mode, Gemini and Perplexity who to hire, the way a homeowner would. Then we checked what the contractors they named had that the others didn't.</p>
     </div>
@@ -267,6 +275,6 @@
   <a class="btn outline" href="sms:+15736803992">Text us</a>
 </div>
 
-<script type="module" src="/logo3d.js?v=20261007e"></script>
+<script type="module" src="/logo3d.js?v=20261007f"></script>
 </body>
 </html>

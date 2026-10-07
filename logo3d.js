@@ -210,16 +210,16 @@ async function homeScene(THREE, RoomEnvironment) {
   function clearOfWords() {
     if (heroBox.classList.contains('page-3d')) {
       heroBox.classList.remove('off');
+      const words = [...heroBox.parentElement.children].filter(el => el !== heroBox).flatMap(el => {
+        const r = document.createRange();
+        r.selectNodeContents(el);
+        return [...r.getClientRects()].filter(w => w.width);
+      });
       if (getComputedStyle(heroBox).position === 'absolute') {
         const b = heroBox.getBoundingClientRect();
-        const hit = [...heroBox.parentElement.children].some(el => {
-          if (el === heroBox) return false;
-          const r = document.createRange();
-          r.selectNodeContents(el);
-          return [...r.getClientRects()].some(w => w.width && w.right > b.left - 16 && w.left < b.right && w.bottom > b.top && w.top < b.bottom);
-        });
-        heroBox.classList.toggle('off', hit);
+        heroBox.classList.toggle('off', words.some(w => w.right > b.left - 16 && w.left < b.right && w.bottom > b.top && w.top < b.bottom));
       }
+      fitRing(words.concat([...heroBox.parentElement.querySelectorAll('.btn')].map(el => el.getBoundingClientRect())));  // buttons: their whole box
     }
     resize();
     pick();
@@ -243,6 +243,53 @@ async function homeScene(THREE, RoomEnvironment) {
     pick();
   }, { rootMargin: '80px 0px' });
   io.observe(hero);
+}
+
+// Other pages: the four AI-tool tiles circle the logo only where they have room. A flat ring first, then
+// steeper ones; the first that stays inside the navy band, on screen and well clear of every word wins.
+// If none does, the logo shows without them.
+const TILE = { w: 92, h: 28 };  // .page-3d .chip in style.css
+// [ring angle on screen, tilt, room between a tile beside the logo and the logo], degrees and px. The last
+// two are for tight spots: an upright ring for logos at the screen edge, and on the smallest phones a flat
+// ring whose tiles tuck just behind the logo's rim (as on the home page).
+const RINGS = [[0, 12, 8], [35, 10, 8], [60, 10, 8], [80, 10, 8], [90, 6, 8], [0, 12, -12]];
+function fitRing(words) {
+  const orbit = heroBox.querySelector('.orbit');
+  if (!orbit) return;
+  heroBox.classList.remove('ring');
+  if (heroBox.classList.contains('off')) return;
+  const b = heroBox.getBoundingClientRect(), band = hero.getBoundingClientRect(), W = root.clientWidth;
+  const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+  const medR = 0.9 * Math.min(b.width, b.height) / 2;  // the medallion's radius in its box, with a little room
+  for (const [deg, tiltDeg, room] of RINGS) {
+    const tz = deg * Math.PI / 180, tx = tiltDeg * Math.PI / 180;
+    // far enough out that a tile beside the logo clears it by `room`
+    const r = medR + TILE.w / 2 * Math.cos(tz) + TILE.h / 2 * Math.sin(tz) + room;
+    const f = ringBounds(r, tz, tx);
+    const z = { left: cx + f.x0 - 6, right: cx + f.x1 + 6, top: cy + f.y0 - 8, bottom: cy + f.y1 + 8 };  // + the pointer lean
+    const fits = z.top >= band.top + 4 && z.bottom <= band.bottom - 4 && z.left >= 8 && z.right <= W - 8 &&
+      !words.some(w => w.right > z.left - 20 && w.left < z.right + 20 && w.bottom > z.top - 20 && w.top < z.bottom + 20);
+    if (fits) {
+      orbit.style.setProperty('--r', r.toFixed(1) + 'px');
+      orbit.style.setProperty('--tz', deg + 'deg');
+      orbit.style.setProperty('--tx', tiltDeg + 'deg');
+      heroBox.classList.add('ring');
+      return;
+    }
+  }
+}
+
+// The screen area a ring of radius r sweeps (tilted tx, turned tz), tiles and depth included, from its centre.
+function ringBounds(r, tz, tx) {
+  let x0 = 0, x1 = 0, y0 = 0, y1 = 0;
+  for (let i = 0; i < 72; i++) {
+    const a = i / 72 * TAU, x = r * Math.sin(a), z = r * Math.cos(a);
+    const y = -z * Math.sin(tx), depth = z * Math.cos(tx), s = 1000 / (1000 - depth);  // perspective: 1000px in style.css
+    const X = x * Math.cos(tz) - y * Math.sin(tz), Y = x * Math.sin(tz) + y * Math.cos(tz);
+    x0 = Math.min(x0, (X - TILE.w / 2) * s); x1 = Math.max(x1, (X + TILE.w / 2) * s);
+    y0 = Math.min(y0, (Y - TILE.h / 2) * s); y1 = Math.max(y1, (Y + TILE.h / 2) * s);
+  }
+  return { x0, x1, y0, y1 };
 }
 
 function buildMedallion(THREE) {
